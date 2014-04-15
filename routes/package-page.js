@@ -3,6 +3,9 @@ module.exports = packagePage
 var commaIt = require('comma-it').commaIt
 
 function packagePage (req, res) {
+  if (req.method === 'POST') return updatePackageDetails(req, res)
+  if (req.method !== 'GET') return res.error(405, 'Method not allowed')
+
   var name = req.params.name
   , version = req.params.version || 'latest'
 
@@ -60,6 +63,9 @@ function packagePage (req, res) {
       // should we print the maintainers list?
       p.showMaintainers = p.maintainers && (!p._npmUser || (p.publisherIsInMaintainersList && p.maintainers.length > 1))
 
+      // can this user edit this package?
+      p.userCanEditPackage = canUserEditPackage(profileModel.profile, p)
+
       var locals = {
         package: p,
         profile: profileModel.profile,
@@ -79,4 +85,54 @@ function packagePage (req, res) {
     })
   })
 
+}
+
+function canUserEditPackage (user, pkg) {
+  if (user && user.name && pkg.maintainers) {
+    for (var i = 0; i < pkg.maintainers.length; i++) {
+      if (pkg.maintainers[i].name === user.name) {
+        return true
+      }
+    }
+  }
+
+  return false
+}
+
+function updatePackageDetails (req, res) {
+
+  req.on('data', function (inc) {
+    var body = JSON.parse(inc)
+      , pm = '/registry/' + req.params.name
+
+    // replace with updates.metadata thing via npm-registry-couchapp
+    req.couch.get(pm + '?revs=true', function (er, cr, data) {
+      if (er) {
+        console.warn('BOOM er: ', er)
+        return res.error(500, er)
+      }
+
+      Object.keys(body).forEach(function (k) {
+        data[k] = body[k]
+      })
+
+      data.time.modified = new Date().toISOString()
+
+      req.couch.put(pm, data, function (er, cr, data) {
+        if (er || data.error) {
+          // this means the user's session has expired
+          er = er || new Error(data.error)
+          er.response = data
+          er.path = req.url
+          res.session.set('error', er)
+          res.session.set('done', req.url)
+          res.statusCode = 403
+          return res.send('User is not logged in', 403)
+        }
+
+        return res.send('OK', 200)
+
+      })
+    })
+  })
 }

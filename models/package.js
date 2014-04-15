@@ -96,7 +96,9 @@ function package (params, cb) {
             return cb(new Error('invalid package: '+ data._id))
           }
           data.version = v
-          if (data.versions[v].readme) {
+          // check to see if there's a newer version of the readme than the
+          // one in the latest package
+          if (data.versions[v].readme && data.time[v] === data.time.modified) {
             data.readme = data.versions[v].readme
             data.readmeSrc = null
           }

@@ -1,10 +1,10 @@
 <%- include('header.ejs', locals) %>
 
+  <% var editableClass = package.userCanEditPackage ? "editable" : "" %>
   <div id="package">
     <header>
       <h1><%= package.name %></h1>
-      <%
-      var starClass = (package.users && profile && package.users[profile.name]) ? "star star-starred" : "star" %>
+      <% var starClass = (package.users && profile && package.users[profile.name]) ? "star star-starred" : "star" %>
       <a href="#" class="<%= starClass %>" title="click here to star/unstar this package" data-name="<%= package.name %>"></a>
     </header>
 
@@ -13,7 +13,12 @@
     <% } %>
 
     <% if (package.description) { %>
-      <p class="description"><%= package.description %></p>
+      <p class="description <%= editableClass %>">
+        <%= package.description %>
+         <% if (package.userCanEditPackage) { %>
+          <button class='edit' data-key='description' title="Edit Description">Edit Description</button>
+        <% } %>
+      </p>
     <% } %>
 
     <pre class="sh"><code>npm install <%= package.name %></code></pre>
@@ -90,12 +95,16 @@
       %>
       <tr>
         <th>Keywords</th>
-        <td><%-
+        <td class="keywords <%= editableClass %>"><%-
           package.keywords.map(function (kw) {
             kw = kw.replace(/</g, '&lt;').replace(/"/g, '&quot;')
             return '<a href="/browse/keyword/' + kw + '">' + kw + '</a>'
           }).join(', ')
-          %></td>
+          %>
+          <% if (package.userCanEditPackage) { %>
+            <button class='edit' data-key='keywords' title="Edit Keywords">Edit Keywords</button>
+          <% } %>
+        </td>
       </tr>
       <% } %>
       <% if (package.repository && package.repository !== 'undefined') {
@@ -108,26 +117,35 @@
       %>
       <tr>
         <th>Repository</th>
-        <td>
+        <td class="repository <%= editableClass %>">
           <% if (gh) { %><a href="<%= gh %>"><% } %>
           <%= package.repository.url %><% if (gh) { %></a><% } %>
           (<%= package.repository.type %>)
+          <% if (package.userCanEditPackage) { %>
+            <button class='edit' data-key='repository' title="Edit Repository">Edit Repository</button>
+          <% } %>
         </td>
       </tr>
       <% } %>
       <% if (typeof package.homepage === 'string') { %>
       <tr>
         <th>Homepage</th>
-        <td>
+        <td class="homepage <%= editableClass %>">
           <a href="<%= encodeURI(package.homepage) %>"><%= package.homepage.replace(/</g, '&lt;') %></a>
+          <% if (package.userCanEditPackage) { %>
+            <button class='edit' data-key="homepage" title="Edit Homepage">Edit Homepage</button>
+          <% } %>
         </td>
       </tr>
       <% } %>
       <% if (package.bugs && package.bugs.url) { %>
       <tr>
-        <th>Bugs</th>
+        <th class="bugs <%= editableClass %>">Bugs</th>
         <td>
           <a href="<%= package.bugs.url %>"><%= package.bugs.url %></a>
+          <% if (package.userCanEditPackage) { %>
+            <button class='edit' data-key="bugs" title="Edit Bugs">Edit Bugs</button>
+          <% } %>
         </td>
       </tr>
       <% } %>
@@ -220,8 +238,13 @@
         <% } %>
       </ul>
 
+      <section class="readme-source"><%= package.readmeSrc %></section>
+
       <% if (package.readme) { %>
       <section id="readme">
+      <% if (package.userCanEditPackage) { %>
+        <button class='edit-readme' data-key="readme" title="Edit Readme">Edit Readme</button>
+      <% } %>
       <%- package.readme %>
       </section>
       <% } %>
@@ -229,4 +252,4 @@
   </div>
 
 <%- include('footer.ejs', locals) %>
-<script src="/static/stars.js" async="true"></script>
+<script src="/static/pkg-page-scripts.js" async="true"></script>
