@@ -93,9 +93,11 @@
     "dev-www": "node dev/go.js www-only | bunyan -l warn",
     "dev-db": "node dev/go.js db-only | bunyan -l warn",
     "repl": "node repl.js",
-    "dev-repl": "CLUSTER_MASTER_REPL=15337 node repl.js"
+    "dev-repl": "CLUSTER_MASTER_REPL=15337 node repl.js",
+    "prepublish": "browserify static/js/package-page-raw.js -o static/js/package-page.js"
   },
   "devDependencies": {
+    "browserify": "^3.43.0",
     "replicate": "git://github.com/isaacs/replicate",
     "touch": "0",
     "once": "~1.1.1"

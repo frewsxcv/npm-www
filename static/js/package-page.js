@@ -1255,11 +1255,13 @@ if (typeof exports === 'object') {
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],2:[function(require,module,exports){
 /*
-	  All the stuff we need on the package-page:
+    All the stuff we need on the package-page:
     - stars
     - edits
+
+    *** browserify compiles this into package-page.js ***
 */
-var marked = require('marked')
+var marked = require('marked') // this is why we need browserify
 
 $(document).ready(function () {
 
@@ -1497,6 +1499,5 @@ function getPackages (name) {
 
   return name ? packages[name] : packages
 }
-
 
 },{"marked":1}]},{},[2])
