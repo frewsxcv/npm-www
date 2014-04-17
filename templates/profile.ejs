@@ -30,7 +30,7 @@
     if (field.show) {
       if (field.name === 'email') {
         var map = Array.prototype.map
-        var obfuscatedEmail = map.call(field.value, function (x) { return '%' + x.charCodeAt(0).toString(16) }).join('') 
+        var obfuscatedEmail = map.call(field.value, function (x) { return '%' + x.charCodeAt(0).toString(16) }).join('')
         %>
         <tr>
           <th><%= field.title %></th>
@@ -110,4 +110,4 @@
 </div>
 
 <%- include('footer.ejs', locals) %>
-<script src="/static/emObf.js" async="true"></script>
+<script src="/static/js/emObf.js" async="true"></script>

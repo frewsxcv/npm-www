@@ -2,8 +2,10 @@
     All the stuff we need on the package-page:
     - stars
     - edits
+
+    *** browserify compiles this into package-page.js ***
 */
-var marked = require('marked')
+var marked = require('marked') // this is why we need browserify
 
 $(document).ready(function () {
 
