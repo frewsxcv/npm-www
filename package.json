@@ -34,7 +34,7 @@
     "npm2es": "git://github.com/npm/npm2es.git",
     "npmconf": "0.0",
     "redis": "~0.8.1",
-    "redsess": "^1.0.0",
+    "redsess": "^1.1.0",
     "request": "~2.21.0",
     "routes": "~0.1.1",
     "sanitizer": "^0.1.1",
