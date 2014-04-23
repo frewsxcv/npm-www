@@ -16,4 +16,20 @@
       <a href="http://www.npmjs.com/jobs/">Jobs</a>
     </li>
   </ul>
+
+  <ul class="hiring">
+    <li class="hiring-group">
+      <a href="/whoshiring">See Who's Hiring</a>
+    </li>
+    <% if (hiring && hiring.name) { %>
+      <li class="hiring-company">
+        <a href="<%= hiring.url %>">
+          <img src="/static/img/hiring/<%= hiring.id %>.png" alt="<%= hiring.name %>"/>
+        </a>
+      </li>
+      <li class="hiring-more">
+        <a href="/whoshiring">+ 8 More...</a>
+      </li>
+    <% } %>
+  </ul>
 </nav>

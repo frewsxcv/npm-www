@@ -150,7 +150,8 @@ form {
         }
       }
       li:first-child { border-top: none; }
-      for link, i in home download about npm docs blog community logos jobs {
+
+      for link, i in home download about npm docs blog community logos jobs hiring-group hiring-company hiring-more {
         li.{link} a {
           background-position: -156px -24*i+3px;
         }
@@ -162,6 +163,26 @@ form {
           background-position: 2px -24*i+3px;
           color: red;
           font-weight: bold;
+        }
+      }
+
+      &.hiring {
+        margin-top: 5em;
+
+        li { border: none; }
+
+        li:first-child { border-top: solid 1px #ccc; }
+        li:last-child { border-bottom: solid 1px #ccc; }
+
+        .hiring-company {
+          padding-top: 5px;
+          text-align: center;
+
+          a { padding: 0; }
+        }
+
+        img {
+          max-width: 100px;
         }
       }
     }
@@ -574,5 +595,28 @@ html body ul.search-results .package.search-result {
   }
   table.metadata tr:first-child {
     border-top: none;
+  }
+}
+
+.hiring {
+  .hiring-logo {
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+    padding: 10px;
+    margin-bottom: 1em;
+    width: 120px;
+
+    img {
+      max-width: 100px;
+    }
+  }
+
+  dd {
+    display: inline-block;
+    vertical-align: middle;
+    width: 70%;
+    margin: 0;
+    margin-bottom: 1em;
   }
 }
