@@ -1,0 +1,14 @@
+<%- include('header.ejs', locals) %>
+
+<h1>Who's Hiring?</h1>
+
+<p>These companies are currently hiring for Node.js developers</p>
+
+<dl class="hiring">
+  <% companies.forEach(function (c) { %>
+    <dt class="hiring-logo"><a href="<%= c.url %>"><img src="/static/img/hiring/<%= c.id %>.png" alt="<%= c.name %>"/></a></dt>
+    <dd><%- c.description %></dd>
+  <% }) %>
+</dl>
+
+<%- include('footer.ejs', locals) %>

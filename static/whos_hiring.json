@@ -1,0 +1,39 @@
+{
+  "companies": [
+    {
+      "id": "voxer",
+      "name": "Voxer",
+      "description": "Jujubes croissant marshmallow jelly-o bear claw cupcake croissant pastry bear claw marshmallow sugar plum topping sugar plum macaroon sweet.",
+      "url": "https://voxer.com/work.html",
+      "show_percentage": 25
+    },
+    {
+      "id": "ftlabs",
+      "name": "FTLabs",
+      "description": "The Financial Times is global news organisation. FTLabs has award winning HTML5 expertise and runs respected <a href='https://github.com/ftlabs'>open source projects</a>",
+      "url": "http://labs.ft.com/jobs/",
+      "show_percentage": 25
+    },
+    {
+      "id": "brandingbrand",
+      "name": "BrandingBrand.com",
+      "description": "Jujubes croissant marshmallow jelly-o bear claw cupcake croissant pastry bear claw marshmallow sugar plum topping sugar plum macaroon sweet.",
+      "url": "http://newton.newtonsoftware.com/career/CareerHome.action?clientId=8a42a12b3dbb17cc013dd762963613d7",
+      "show_percentage": 17
+    },
+    {
+      "id": "newscred",
+      "name": "NewsCred",
+      "description": "Jujubes croissant marshmallow jelly-o bear claw cupcake croissant pastry bear claw marshmallow sugar plum topping sugar plum macaroon sweet.",
+      "url": "https://newscred.com/careers",
+      "show_percentage": 17
+    },
+    {
+      "id": "thedash",
+      "name": "Dash",
+      "description": "Jujubes croissant marshmallow jelly-o bear claw cupcake croissant pastry bear claw marshmallow sugar plum topping sugar plum macaroon sweet.",
+      "url": "http://www.spiderstrategies.com/about-us/careers/",
+      "show_percentage": 16
+    }
+  ]
+}
