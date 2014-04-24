@@ -100,39 +100,22 @@ function canUserEditPackage (user, pkg) {
 }
 
 function updatePackageDetails (req, res) {
-
   req.on('data', function (inc) {
     var body = JSON.parse(inc)
-      , pm = '/registry/' + req.params.name
+      , pm = '/registry/_design/app/_update/metadata/' + req.params.name
 
-    // replace with updates.metadata thing via npm-registry-couchapp
-    req.couch.get(pm + '?revs=true', function (er, cr, data) {
-      if (er) {
-        console.warn('BOOM er: ', er)
-        return res.error(500, er)
+    req.couch.put(pm, body, function (er, cr, data) {
+      if (er || data.error) {
+        // this means the user's session has expired
+        er = er || new Error(data.error)
+        er.response = data
+        er.path = req.url
+        res.session.set('error', er)
+        res.session.set('done', req.url)
+        res.statusCode = 403
+        return res.send('User is not logged in', 403)
       }
-
-      Object.keys(body).forEach(function (k) {
-        data[k] = body[k]
-      })
-
-      data.time.modified = new Date().toISOString()
-
-      req.couch.put(pm, data, function (er, cr, data) {
-        if (er || data.error) {
-          // this means the user's session has expired
-          er = er || new Error(data.error)
-          er.response = data
-          er.path = req.url
-          res.session.set('error', er)
-          res.session.set('done', req.url)
-          res.statusCode = 403
-          return res.send('User is not logged in', 403)
-        }
-
-        return res.send('OK', 200)
-
-      })
+      return res.send('OK', 200)
     })
   })
 }
