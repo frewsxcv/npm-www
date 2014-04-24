@@ -28,6 +28,7 @@ function recentauthors (req, res) {
   var start = page * pageSize
   var limit = pageSize
   req.model.load('recentauthors', age, start, limit)
+  req.model.load('whoshiring')
   req.model.load('profile', req)
   req.model.end(function (er, m) {
     if (er)
@@ -38,6 +39,7 @@ function recentauthors (req, res) {
       pageTitle: title,
       items: m.recentauthors,
       profile: m.profile,
+      hiring: m.whoshiring,
       pageSize: pageSize,
       page: page
     })

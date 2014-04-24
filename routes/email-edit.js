@@ -61,6 +61,7 @@ if (!devMode) {
 }
 
 function emailEdit (req, res) {
+  req.model.loadAs('whoshiring')
   switch (req.method) {
     case 'POST':
     case 'PUT':
@@ -90,6 +91,7 @@ function form (er, code, req, res) {
   login(req, res, function (profile) {
     res.template('email-edit.ejs', {
       profile: profile,
+      hiring: req.model.whoshiring,
       error: er
     }, code || 200)
   })
@@ -115,6 +117,7 @@ function handle (req, res) {
       if (pwhash !== profHash) {
         return res.template('email-edit.ejs', {
           error: 'Invalid password',
+          hiring: req.model.whoshiring,
           profile: profile
         }, 403)
       }
@@ -237,7 +240,7 @@ function sendEmails (conf, rev, profile, req, res) {
     mailer.sendMail(confMail, function (er, result) {
       if (er)
         return res.error(er)
-      res.template('email-edit-submitted.ejs', { profile: profile })
+      res.template('email-edit-submitted.ejs', { profile: profile, hiring: req.model.whoshiring })
     })
   })
 }
@@ -300,7 +303,7 @@ function revert (req, res) {
             return res.error(er)
           // now make sure that the email is the correct one
           if (profile.email === email1)
-            return res.template('email-edit-reverted.ejs', { profile: profile })
+            return res.template('email-edit-reverted.ejs', { profile: profile, hiring: req.model.whoshiring })
 
           // uh, oh.  set it back to the old one in couchdb
           setEmail(profile, email1, 'email-edit-reverted.ejs', req, res)
@@ -352,7 +355,7 @@ function setEmail (profile, email, template, req, res) {
 
     // ok it's a valid user
     if (data.email === email)
-      return res.template(template, { profile: profile })
+      return res.template(template, { profile: profile, hiring: req.model.whoshiring })
 
     data.email = email
     couch.put(pu, data, function (er, cr, data) {
@@ -366,7 +369,7 @@ function setEmail (profile, email, template, req, res) {
         // confusing messages.
         profile.email = email
         req.session.set('profile', profile, function () {
-          res.template(template, { profile: profile })
+          res.template(template, { profile: profile, hiring: req.model.whoshiring })
         })
       }
     })

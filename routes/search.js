@@ -45,10 +45,12 @@ function search (req, res) {
   }
 
   req.model.load('profile', req)
+  req.model.load('whoshiring')
   req.model.load('search', qs)
   req.model.end(function(er, m) {
     var locals = {
       profile: m.profile,
+      hiring: m.whoshiring,
       search: m.search
     }
     if (er)

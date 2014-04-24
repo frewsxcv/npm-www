@@ -10,6 +10,7 @@ function packagePage (req, res) {
   req.model.load('profile', req)
   req.model.end(function(er,profileModel) {
     req.model.load('package', req.params)
+    req.model.load('whoshiring')
     req.model.load('browse', 'depended', req.params.name, 0, 1000)
 
     // Show download count for the last day, week, and month
@@ -51,6 +52,7 @@ function packagePage (req, res) {
         var locals = {
           package: p,
           profile: profileModel.profile,
+          hiring: m.whoshiring,
           title: m.package.name
         }
 
@@ -63,6 +65,7 @@ function packagePage (req, res) {
       var locals = {
         package: p,
         profile: profileModel.profile,
+        hiring: m.whoshiring,
         title: m.package.name,
         dlDetail: dlDetail
       }

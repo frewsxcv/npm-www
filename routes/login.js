@@ -3,6 +3,7 @@ var url = require("url")
   , request = require("request")
 
 function login (req, res) {
+  req.model.loadAs('whoshiring')
   switch (req.method) {
     case 'POST': return handleForm(req, res)
 
@@ -19,6 +20,7 @@ function login (req, res) {
           // error just means we're not logged in.
           var locals = {
             profile: m && m.profile,
+            hiring: req.model.whoshiring,
             error: null
           }
 
@@ -34,13 +36,13 @@ function login (req, res) {
 function handleForm (req, res) {
   req.on('form', function (data) {
     if (!data.name || !data.password) {
-      return res.template('login.ejs', {error: 'Name or password not provided'})
+      return res.template('login.ejs', {error: 'Name or password not provided', hiring: req.model.whoshiring})
     }
 
     req.couch.login(data, function (er, cr, couchSession) {
       if (er) return res.error(er, 'login.ejs')
       if (cr.statusCode !== 200) {
-        return res.template('login.ejs', {error: 'Username and/or password is wrong'})
+        return res.template('login.ejs', {error: 'Username and/or password is wrong', hiring: req.model.whoshiring})
       }
 
       // look up the profile data.  we're gonna need

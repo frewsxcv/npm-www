@@ -55,6 +55,7 @@ function indexPage (req, res) {
   req.model.loadAs('downloads', 'dlMonth', 'last-month', 'point')
 
   req.model.load('profile', req)
+  req.model.load('whoshiring', false)
 
   req.model.end(function (er, m) {
     var locals = {
@@ -67,6 +68,7 @@ function indexPage (req, res) {
       dlDay: commaIt(m.dlDay || 0),
       dlMonth: commaIt(m.dlMonth || 0),
       dlWeek: commaIt(m.dlWeek || 0),
+      hiring: m.whoshiring || {},
       totalPackages: commaIt(m.packagescreated || 0)
     }
     res.template("index.ejs", locals)

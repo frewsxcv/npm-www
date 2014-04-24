@@ -3,6 +3,7 @@ var config = require("../config.js")
 var userValidate = require("npm-user-validate")
 
 function signup (req, res) {
+  req.model.loadAs('whoshiring')
   switch (req.method) {
     case 'GET': case 'HEAD': return show(req, res)
     case 'POST': return handle(req, res)
@@ -17,7 +18,8 @@ function show (req, res) {
     res.template('signup-form.ejs', {
       profile: m.profile,
       errors: null,
-      data: null
+      data: null,
+      hiring: req.model.whoshiring
     })
   })
 }
@@ -26,6 +28,7 @@ function handle (req, res) {
   var td = { errors: null, data: null }
   req.on('form', function (data) {
     td.data = data
+    td.hiring = req.model.whoshiring
 
     var name = data.name
     , password = data.password

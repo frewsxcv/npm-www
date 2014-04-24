@@ -88,6 +88,7 @@ function saveThenShow (data, req, res) {
 // get the profile and show it on a form, maybe with a message
 function show (err, req, res) {
   req.model.load('profile', req)
+  req.model.load('whoshiring')
   req.model.end(function (er, m) {
     var profile = m.profile
     var statusCode = 200
@@ -100,6 +101,7 @@ function show (err, req, res) {
     }
     var locals = {
       profile: profile,
+      hiring: m.whoshiring,
       fields: profile.fields,
       title: 'Edit profile',
       error: err

@@ -9,6 +9,7 @@ function profile (req, res) {
 
   // get the user's own profile
   req.model.load('profile', req)
+  req.model.load('whoshiring')
 
   // get the profile of the specified account, if there is one.
   if (req.params && req.params.name) {
@@ -24,7 +25,8 @@ function profile (req, res) {
           name: req.params.name,
           stack: er.stack,
           response: er.responseRaw.trim(),
-          profile: m.profile
+          profile: m.profile,
+          hiring: m.whoshiring
         }, 404)
       else
         return res.error(er.code, er)
@@ -47,6 +49,7 @@ function profile (req, res) {
 function loadPackages (req, name) {
   req.model.loadAs('browse', 'starred', 'userstar', name, 0, 1000)
   req.model.loadAs('browse', 'packages', 'author', name, 0, 1000)
+  req.model.loadAs('whoshiring')
 }
 
 function showProfile (req, res, showprofile) {
@@ -57,14 +60,15 @@ function showProfile (req, res, showprofile) {
     return res.redirect('/login')
   }
 
-  var profile = req.model.profile
-
-  var td = { showprofile: showprofile
-           , profile: req.model.profile
-           , fields: showprofile.fields
-           , title: showprofile.name
-           , packages: req.model.packages
-           , starred: req.model.starred
-           }
-  res.template('profile.ejs', td)
+  req.model.end(function (er, m) {
+    var td = { showprofile: showprofile
+             , profile: req.model.profile
+             , fields: showprofile.fields
+             , title: showprofile.name
+             , hiring: req.model.whoshiring
+             , packages: req.model.packages
+             , starred: req.model.starred
+             }
+    res.template('profile.ejs', td)
+  })
 }

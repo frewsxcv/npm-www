@@ -63,6 +63,7 @@ module.exports = forgotPassword
 // Until password is changed, login is not valid.
 
 function forgotPassword (req, res) {
+  req.model.loadAs('whoshiring')
   switch (req.method) {
     case 'POST': return handle(req, res)
     case 'GET': case 'HEAD':
@@ -80,7 +81,7 @@ function forgotPassword (req, res) {
 function form (msg, code, req, res) {
   code = code || 200
 
-  res.template('password-recovery-form.ejs', { error: msg }, code)
+  res.template('password-recovery-form.ejs', { error: msg, hiring: req.model.whoshiring }, code)
 }
 
 function token (req, res) {
@@ -119,6 +120,7 @@ function token (req, res) {
       config.redis.client.del('pwrecover_' + hash, function () {})
       res.template('password-changed.ejs', {
         password: newPass,
+        hiring: req.model.whoshiring,
         profile: null
       })
     })
@@ -153,6 +155,7 @@ function handle (req, res) {
     // no valid username and no valid email
     if (userValidate.username(nameEmail) && userValidate.email(nameEmail))
       return res.template('password-recovery-form.ejs', {
+        hiring: req.model.whoshiring,
         error: 'Need a valid username or email address'
       }, 400)
 
@@ -181,7 +184,7 @@ function lookupUserByEmail (em, req, res) {
     // show a view where we can choose the right user
     // after chosing we get data.selectName
     if (usernames.length > 1) {
-      return res.template('password-recovery-choose-user.ejs', {users: usernames})
+      return res.template('password-recovery-choose-user.ejs', {users: usernames, hiring: req.model.whoshiring})
     }
     // just one user with that email address
     if (usernames.length === 1) {
@@ -284,7 +287,7 @@ function lookupUserByUsername (name, req, res) {
     function done (er, result) {
       // now the token is in redis, and the email has been sent.
       if (er) return res.error(er)
-      res.template('password-recovery-submitted.ejs', {profile: null})
+      res.template('password-recovery-submitted.ejs', {profile: null, hiring: req.model.whoshiring})
     }
   })
 }

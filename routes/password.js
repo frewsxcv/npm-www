@@ -6,6 +6,7 @@ var userValidate = require("npm-user-validate")
 // change the password on post, if valid,
 // or show the form to do the same.
 function password (req, res) {
+  req.model.loadAs('whoshiring')
   switch (req.method) {
     case 'GET':
     case 'HEAD': return show(req, res)
@@ -16,7 +17,11 @@ function password (req, res) {
 
 function show (req, res) {
   login(req, res, function () {
-    res.template('password.ejs', { profile: req.profile, error: null })
+    res.template('password.ejs', {
+      profile: req.profile
+    , error: null
+    , hiring: req.model.whoshiring
+    })
   })
 }
 
@@ -50,7 +55,8 @@ function handleData (req, res, data) {
 
   var prof = req.profile
   , salt = prof.salt
-  , td = {profile: req.profile, error: null}
+  , td = {profile: req.profile, error: null,
+          hiring: req.model.whoshiring}
   , hashCurrent = prof.password_sha ? sha(data.current + salt) :
                     pbkdf2(data.current, salt, parseInt(prof.iterations,10))
   , hashProf = prof.password_sha || prof.derived_key
