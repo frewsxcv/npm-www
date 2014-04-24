@@ -19,16 +19,16 @@
 
   <ul class="hiring">
     <li class="hiring-group">
-      <a href="/whoshiring">See Who's Hiring</a>
+      <a href="/whoshiring">Who's Hiring</a>
     </li>
-    <% if (hiring && hiring.name) { %>
+    <% if (typeof hiring !== 'undefined' && hiring.name) { %>
       <li class="hiring-company">
         <a href="<%= hiring.url %>">
-          <img src="/static/img/hiring/<%= hiring.id %>.png" alt="<%= hiring.name %>"/>
+          <span><%= hiring.name %></span>
         </a>
       </li>
       <li class="hiring-more">
-        <a href="/whoshiring">+ 8 More...</a>
+        <a href="/whoshiring">+ <%= hiring.numCompanies - 1 %> More...</a>
       </li>
     <% } %>
   </ul>

@@ -15,7 +15,6 @@ function hiring (showAll, cb) {
   }
 
   var co = getRandomCompany(whos_hiring.companies)
-  console.warn('hiring: ', co)
   return cb(null, co)
 }
 
@@ -32,6 +31,7 @@ function getRandomCompany (companies) {
   for (var i = 0; i < companies.length; ++i) {
     if (rand >= runningTotal &&
         rand < (companies[i].show_percentage + runningTotal)) {
+      companies[i].numCompanies = companies.length
       return companies[i]
     }
 
